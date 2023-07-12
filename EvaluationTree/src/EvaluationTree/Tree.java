@@ -19,7 +19,7 @@ public class Tree {
     //checks to see if the character is operator
     private boolean isOperator(String s) {
         return s.equals("+") || s.equals("-") || s.equals("*")
-                || s.equals("/") || s.equals("%");
+                || s.equals("/") || s.equals("%") || s.equals("^");
     }
 
     public double evaluate() {
@@ -50,6 +50,9 @@ public class Tree {
                     }
                     return evaluateHelper(l.left) % evaluateHelper(l.right);
                 }
+                case "^" -> {
+                    return Math.pow(evaluateHelper(l.left), evaluateHelper(l.right));
+                }
             }
             // After determining the type of the operator
             // Implement the operation between the left and right node
@@ -74,23 +77,29 @@ public class Tree {
                     root = n;
                     curr = root;
                 } else if (isOperator(i)) {
-                    if (i.equals("+") || i.equals("-")
+                    if ((i.equals("+") || i.equals("-")
                             || root.data.equals("*") || root.data.equals("/")
-                            || root.data.equals("%")) {
+                            || root.data.equals("%") || root.data.equals("^"))
+                            && !i.equals("^")) {
                         n.left = root;
                         root = n;
                         curr = root;
-                    }else{
+                    } else if (i.equals("^") && curr.data.equals("^")) {
+                        n.left = curr.right;
+                        curr.right = n;
+                        curr = n;
+                    } else {
                         n.left = root.right;
                         root.right = n;
                         curr = n;
                     }
-                }else{
+                } else {
                     if (!isOperator(curr.data)) {
                         curr.data = curr.data + i;
-                    }else{
+                    } else if (curr.right != null) {
+                        curr.right.data = curr.right.data + i;
+                    } else {
                         curr.right = n;
-                        curr = curr.right;
                     }
                 }
             }
