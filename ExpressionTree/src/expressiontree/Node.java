@@ -10,12 +10,13 @@ package expressiontree;
  */
 public class Node {
     char data;
-    Node left,right;
+    Node left,right, parent;
 
     public Node(char data) {
         this.data = data;
         this.left = null;
         this.right = null;
+        this.parent = null;
     }
     
 }

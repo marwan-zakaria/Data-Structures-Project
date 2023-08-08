@@ -22,7 +22,7 @@ public class ExpressionTree {
         while(cont){
         Tree t = new Tree();
             System.out.println("Enter the expression: ");
-            t.insertPostfix(s.next());
+            t.insertPrefix(s.next());
             System.out.println("The expression is equal to " + t.evaluate());
             
             System.out.println("Do you want to enter another expression?");

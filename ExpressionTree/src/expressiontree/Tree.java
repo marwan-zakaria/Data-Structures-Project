@@ -26,51 +26,29 @@ public class Tree {
             return;
         }
         System.out.println("The prefix expression: " + exp);
-        
+
         Node curr = root;
-        Node parent = root;
 
         for (char i : exp.toCharArray()) {
             if (root == null) {
                 root = new Node(i);
                 curr = root;
-                parent = root;
             } else {
                 if (curr.left == null && Character.isDigit(i)) {
                     curr.left = new Node(i);
-                } else if (curr.left == null) {
+                }else if (curr.left == null) {
                     curr.left = new Node(i);
-                    parent = curr;
+                    curr.left.parent = curr;
                     curr = curr.left;
-                } else if (Character.isDigit(i)) {
+                }else if (Character.isDigit(i)) {
                     curr.right = new Node(i);
-                    curr = parent;
-                } else {
+                }else{
                     curr.right = new Node(i);
-                    parent = curr;
+                    curr.right.parent = curr;
                     curr = curr.right;
                 }
-                if (curr == parent && curr.right != null) {
-                    curr = root;
-                    parent = curr;
-                    if (root.right == null) {
-                        curr = root.left;
-                        while (curr.right != null && curr.left != null) {
-                            parent = curr;
-                            curr = curr.right;
-                        }
-                        if (Character.isDigit(curr.data)) {
-                            curr = root;
-                            parent = root;
-                        }
-                    }else{
-                        curr = root.right;
-                        while (curr.right != null && curr.left != null) {
-                            parent = curr;
-                            curr = curr.right;
-                        }
-                    }
-
+                while(curr.right != null && curr.parent != null){
+                    curr = curr.parent;
                 }
             }
         }
@@ -85,47 +63,30 @@ public class Tree {
             exp = Stack.InfixToPostfix(exp);
         }
         System.out.println("The postfix expression: " + exp);
-        
+
         Node curr = root;
-        Node parent = root;
         for (int i = exp.length() - 1; i > -1; i--) {
             if (root == null) {
                 root = new Node(exp.charAt(i));
                 curr = root;
-                parent = root;
             } else {
                 if (curr.right == null && Character.isDigit(exp.charAt(i))) {
                     curr.right = new Node(exp.charAt(i));
-                } else if (curr.right == null) {
+                }else if (curr.right == null) {
                     curr.right = new Node(exp.charAt(i));
-                    parent = curr;
+                    curr.right.parent = curr;
                     curr = curr.right;
-                } else if (Character.isDigit(exp.charAt(i))) {
+                }else if (Character.isDigit(exp.charAt(i))) {
                     curr.left = new Node(exp.charAt(i));
-                    curr = parent;
-                } else {
+                }else{
                     curr.left = new Node(exp.charAt(i));
-                    parent = curr;
+                    curr.left.parent = curr;
                     curr = curr.left;
                 }
-                if (curr == parent && curr.left != null) {
-                    curr = root;
-                    parent = root;
-                    if (root.left == null) {
-                        while(curr.left == null && curr.right != null){
-                            parent = curr;
-                            curr = curr.right;
-                        }
-                        curr = parent;
-                    }else{
-                        curr = root.left;
-                        while(curr.left == null && curr.right != null){
-                            parent = curr;
-                            curr = curr.right;
-                        }
-                        curr = parent;
-                    }
+                while(curr.left != null && curr.parent != null){
+                    curr = curr.parent;
                 }
+                
             }
         }
     }
